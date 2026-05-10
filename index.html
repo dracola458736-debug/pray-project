@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>سُجُود - مساعد الصلاة الذكي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header-img-section">
+    <img src="sajda.jpg" alt="sajda" class="header-img" />
+    <div class="header-overlay">
+      <div class="cover-content">
+        <div class="quranic-logo" style="font-family: 'Amiri', serif; font-size: 4.5rem; color: #fff; letter-spacing: 2px; text-shadow: 0 0 30px #000; line-height: 1.1;">سُجُودْ</div>
+        <div class="subtitle" style="color: #fff; font-size: 2rem; margin-bottom: 2rem; text-shadow: 0 0 10px #000; font-weight: bold;">طريقك للخشوع</div>
+        <button id="btn-start-app" class="glass-btn">ابدأ</button>
+      </div>
+      <div class="scroll-down">
+        <i class="fas fa-chevron-down"></i>
+        <span>مرر للأسفل</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="info-section" class="info-section">
+      <div class="info-block animated-text" style="background: rgba(46, 204, 113, 0.05); padding: 30px; border-radius: 30px; border: 1px solid rgba(46, 204, 113, 0.1);">
+        <p class="description-text">
+          برنامج "سُجُودْ" يساعدك على عدم نسيان الركعات باستخدام الكاميرا.
+        </p>
+      </div>
+      <div class="medium-spacer" style="height: 150px;"></div>
+    </div>
+
+    <section class="about-full-section animated-text" style="background: url('green.png') no-repeat center center; background-size: cover; border-top-left-radius: 60px; border-top-right-radius: 60px; overflow: hidden; min-height: auto; width: 100vw; display: flex; align-items: center; justify-content: center; color: #fff; padding: 40px 0;">
+      <div class="about-content">
+        <h2 style="margin-top:0; margin-bottom:10px; font-size: 2.5rem;">من نحن</h2>
+        <p class="powered-by" style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 5px;">Powered by</p>
+        <p class="owner-name" style="font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; text-shadow: 0 4px 10px rgba(0,0,0,0.3);">Ahmed El Sayed</p>
+        
+        <a href="https://wa.me/201101170025" target="_blank" class="whatsapp-only-btn">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const whatsappBtn = document.querySelector('.whatsapp-only-btn');
+      if (whatsappBtn) {
+        whatsappBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          const url = this.getAttribute('href');
+          this.classList.add('clicked');
+          setTimeout(() => {
+            window.open(url, '_blank');
+            this.classList.remove('clicked');
+          }, 300); // تأخير بسيط لرؤية اللون الأخضر
+        });
+      }
+
+      document.getElementById('btn-start-app').onclick = function() {
+        window.location.href = 'select.html';
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.animated-text').forEach(el => observer.observe(el));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,500 @@
+:root {
+  --whatsapp-color: #25d366;
+  --gold-accent: #d4af37;
+  --pure-green: #2ecc71; /* لون زر ابدأ الأصلي */
+}
+
+body {
+  margin: 0; padding: 0;
+  background: #fff;
+  font-family: 'Tajawal', sans-serif;
+  overflow-x: hidden;
+}
+
+/* --- الهيدر (100%) --- */
+.header-img-section {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.header-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: blur(5px); /* بلور خفيف للصورة */
+  transform: scale(1.1); /* لمنع حواف البلور البيضاء */
+}
+
+.header-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* تعتيم خفيف لتوضيح الكلام */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* --- زر ابدأ الزجاجي الجديد --- */
+.glass-btn {
+  padding: 15px 60px;
+  font-size: 1.8rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: all 0.3s ease;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* --- مؤشر التمرير --- */
+.scroll-down {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  animation: bounce 2s infinite;
+}
+
+.scroll-down i {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.scroll-down span {
+  font-size: 0.9rem;
+  font-family: 'Tajawal', sans-serif;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);}
+  40% {transform: translateY(-10px) translateX(-50%);}
+  60% {transform: translateY(-5px) translateX(-50%);}
+}
+
+/* --- قسم المحتوى --- */
+.info-section {
+  padding: 200px 24px 0;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.description-text {
+  font-size: 2rem; /* تكبير حجم الخط */
+  line-height: 2.2;
+  color: #2ecc71; /* لون أخضر إسلامي */
+  font-weight: bold; /* خط واضح */
+  text-align: center;
+}
+
+.medium-spacer { height: 300px; }
+
+/* --- قسم من نحن المحدث بالصورة الجديدة --- */
+.about-full-section {
+  position: relative;
+  width: 100vw;
+  min-height: auto; /* تغيير من 500px ليكون مرناً */
+  background: url('green.png') no-repeat center center; 
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  padding: 40px 0; /* تقليل البادينج لتقليل الارتفاع */
+  border-top-left-radius: 60px;
+  border-top-right-radius: 60px;
+  margin-top: 100px;
+}
+
+.about-content {
+  text-align: center;
+  z-index: 5;
+}
+
+.about-content h2 {
+  font-family: 'Amiri', serif;
+  font-size: 4rem;
+  margin-bottom: 10px;
+  color: var(--gold-accent);
+}
+
+.owner-name {
+  font-size: 1.8rem;
+  margin-bottom: 40px;
+}
+
+/* --- زر الواتساب (مربع بحواف ناعمة) --- */
+.whatsapp-only-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px; height: 70px;
+  text-decoration: none;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1); /* شفاف زجاجي افتراضياً */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.whatsapp-only-btn i { font-size: 3rem; }
+
+/* هوفر للكمبيوتر */
+@media (hover: hover) {
+  .whatsapp-only-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    border-color: var(--whatsapp-color);
+  }
+}
+
+/* يتحول للأخضر عند الضغط (Active) */
+.whatsapp-only-btn:active, .whatsapp-only-btn.clicked {
+  background: var(--whatsapp-color) !important;
+  transform: scale(0.95);
+  box-shadow: 0 0 20px var(--whatsapp-color);
+}
+
+/* --- تحسينات الموبايل --- */
+@media (max-width: 768px) {
+  .quranic-logo {
+    font-size: 3rem !important;
+  }
+  .subtitle {
+    font-size: 1.5rem !important;
+  }
+  .glass-btn {
+    padding: 12px 40px;
+    font-size: 1.4rem;
+  }
+  .description-text {
+    font-size: 1.4rem;
+    padding: 0 10px;
+    line-height: 1.8;
+  }
+  .info-section {
+    padding: 100px 15px 0;
+  }
+  .about-content h2 {
+     font-size: 2.5rem;
+   }
+   .owner-name {
+     font-size: 1.8rem !important;
+   }
+   .about-full-section {
+     border-top-left-radius: 30px !important; /* تقليل انحناء الحواف في الموبايل */
+     border-top-right-radius: 30px !important;
+     padding: 20px 0 !important; /* تقليل السمك (الارتفاع) في الموبايل */
+     margin-top: 50px !important; /* تقليل المسافة العلوية */
+   }
+   .about-content h2 {
+     font-size: 1.8rem !important; /* تصغير العنوان ليتناسب مع السمك الجديد */
+     margin-bottom: 5px !important;
+   }
+   .owner-name {
+     font-size: 1.4rem !important;
+     margin-bottom: 15px !important;
+   }
+   .whatsapp-only-btn {
+     width: 55px !important; /* تصغير الزر ليتناسب مع القسم النحيف */
+     height: 55px !important;
+   }
+   .whatsapp-only-btn i {
+     font-size: 2.2rem !important;
+   }
+ }
+
+/* --- صفحة اختيار الصلاة وتتبع الركعات --- */
+.screen {
+  display: none;
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('salawat.jpg') no-repeat center center;
+  background-size: cover;
+  color: #fff;
+  backdrop-filter: blur(5px); /* إضافة بلور خفيف للخلفية */
+}
+
+.screen.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.select-container {
+  text-align: center;
+  padding: 20px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.mini-logo {
+  font-family: 'Amiri', serif;
+  font-size: 3rem;
+  color: var(--gold-accent);
+  margin-bottom: 10px;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+.select-container h1 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  font-weight: normal;
+}
+
+.prayer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  padding: 10px;
+}
+
+.prayer-btn {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 30px 10px;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.prayer-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px);
+  border-color: var(--gold-accent);
+}
+
+/* شاشة التتبع والعداد */
+.tracker-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.big-counter {
+  font-size: 30vh; /* يعتمد على ارتفاع الشاشة ليكون مناسباً بالطول والعرض */
+  font-weight: bold;
+  color: var(--gold-accent);
+  text-shadow: 0 0 50px rgba(212, 175, 55, 0.4);
+  line-height: 1;
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#current-prayer-name {
+  font-size: 2rem;
+  opacity: 0.9;
+}
+
+.tracker-header p {
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
+.video-wrap {
+  position: relative;
+  width: 200px; /* تصغير الكاميرا في زاوية أو إخفاؤها */
+  height: 150px;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.3);
+  margin-top: 20px;
+}
+
+#cam-canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.status-indicator {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  background: rgba(0,0,0,0.5);
+  padding: 2px 10px;
+  border-radius: 10px;
+}
+
+/* تعديلات الموبايل للعداد */
+@media (max-width: 768px) {
+  .big-counter {
+    font-size: 40vw; /* في الموبايل يعتمد على عرض الشاشة ليكون ضخماً */
+  }
+  /* إذا كان الموبايل بالعرض (Landscape) */
+  @media (orientation: landscape) {
+    .big-counter {
+      font-size: 40vh; 
+    }
+  }
+  .prayer-grid {
+    grid-template-columns: 1fr; /* كروت تحت بعض في الموبايل */
+  }
+}
+
+/* --- لوحة زجاجية (Modal) --- */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.glass-modal {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalPop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-icon {
+  font-size: 3.5rem;
+  color: var(--gold-accent);
+  margin-bottom: 20px;
+}
+
+.glass-modal h2 {
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+}
+
+.glass-modal p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.modal-btn.primary {
+  background: var(--gold-accent);
+  color: #000;
+  font-weight: bold;
+}
+
+.modal-btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.modal-btn:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.1);
+}
+
+/* شاشة الانتهاء */
+.finish-container {
+  text-align: center;
+  padding: 20px;
+  max-width: 600px;
+  width: 90%;
+}
+
+.finish-header i {
+  font-size: 5rem;
+  color: var(--pure-green);
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 20px rgba(46, 204, 113, 0.4));
+}
+
+.finish-header h1 {
+  font-family: 'Amiri', serif;
+  font-size: 3.5rem;
+  margin-bottom: 30px;
+  color: var(--gold-accent);
+}
+
+.athkar-box {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 30px;
+}
+
+.athkar-box h3 {
+  color: var(--gold-accent);
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+#prayer-athkar {
+  font-size: 1.3rem;
+  line-height: 2;
+  color: #eee;
+}
+
+/* --- الأنيميشن --- */
+.animated-text {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 1s ease-out;
+}
+
+.animated-text.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
