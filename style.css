@@ -291,6 +291,10 @@ body {
 }
 
 /* شاشة التتبع والعداد */
+.screen#screen-tracker {
+  background: #0d3b2e; /* لون أخضر إسلامي عميق */
+}
+
 .tracker-header {
   text-align: center;
   margin-bottom: 30px;
@@ -299,8 +303,8 @@ body {
 .big-counter {
   font-size: 30vh; /* يعتمد على ارتفاع الشاشة ليكون مناسباً بالطول والعرض */
   font-weight: bold;
-  color: var(--gold-accent);
-  text-shadow: 0 0 50px rgba(212, 175, 55, 0.4);
+  color: #fff; /* العداد أبيض ناصع */
+  text-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
   line-height: 1;
   margin: 20px 0;
   display: flex;
@@ -309,23 +313,19 @@ body {
 }
 
 #current-prayer-name {
-  font-size: 2rem;
-  opacity: 0.9;
+  font-size: 2.5rem;
+  opacity: 1;
+  color: var(--gold-accent); /* اسم الصلاة بالذهبي للتميز */
 }
 
 .tracker-header p {
-  font-size: 1.2rem;
-  opacity: 0.7;
+  font-size: 1.5rem;
+  opacity: 0.8;
+  color: #fff;
 }
 
 .video-wrap {
-  position: relative;
-  width: 200px; /* تصغير الكاميرا في زاوية أو إخفاؤها */
-  height: 150px;
-  border-radius: 15px;
-  overflow: hidden;
-  border: 2px solid rgba(255,255,255,0.3);
-  margin-top: 20px;
+  display: none; /* إخفاء الكاميرا والكانفاس تماماً */
 }
 
 #cam-canvas {
