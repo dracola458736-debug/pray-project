@@ -262,10 +262,14 @@ body {
 }
 
 .prayer-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 15px;
   padding: 10px;
+  width: 90%;
+  max-width: 400px; /* تحديد عرض أقصى للكروت لتكون متوسطة */
+  margin: 0 auto;
+  align-items: center; /* توسيط الأزرار داخل الجريد */
 }
 
 .prayer-btn {
@@ -273,21 +277,104 @@ body {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px;
-  padding: 30px 10px;
+  padding: 20px 30px;
   color: #fff;
   font-size: 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 10px;
+  justify-content: center; /* توسيط المحتوى داخل الزر */
+  text-align: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.prayer-btn i {
+  font-size: 2rem;
+  color: var(--gold-accent);
 }
 
 .prayer-btn:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: translateY(-5px);
   border-color: var(--gold-accent);
+}
+
+/* أزرار التحكم العلوية */
+.back-arrow {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: #fff;
+  font-size: 1.8rem;
+  text-decoration: none;
+  z-index: 100;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.back-arrow:hover {
+  opacity: 1;
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 1.5rem;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000; /* رفع الـ z-index لضمان الظهور */
+  backdrop-filter: blur(5px);
+  transition: all 0.3s;
+}
+
+.close-btn i {
+  pointer-events: none; /* منع تداخل الأيقونة مع الضغطة */
+}
+
+.close-btn:hover {
+  background: rgba(255, 45, 45, 0.3);
+  border-color: rgba(255, 45, 45, 0.5);
+}
+
+/* مؤشر التسجيل (النقطة الحمراء) */
+.recording-indicator {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.red-dot {
+  width: 12px;
+  height: 12px;
+  background: #ff4d4d;
+  border-radius: 50%;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 /* شاشة التتبع والعداد */
@@ -347,17 +434,26 @@ body {
 
 /* تعديلات الموبايل للعداد */
 @media (max-width: 768px) {
-  .big-counter {
-    font-size: 40vw; /* في الموبايل يعتمد على عرض الشاشة ليكون ضخماً */
-  }
-  /* إذا كان الموبايل بالعرض (Landscape) */
-  @media (orientation: landscape) {
-    .big-counter {
-      font-size: 40vh; 
-    }
-  }
   .prayer-grid {
-    grid-template-columns: 1fr; /* كروت تحت بعض في الموبايل */
+    width: 95%;
+  }
+  .prayer-btn {
+    padding: 18px 20px;
+    font-size: 1.3rem;
+    justify-content: center; /* توسيط في الموبايل أيضاً */
+    padding-right: 20px; /* إعادة ضبط المسافة بعد حذف الأيقونة */
+  }
+  .glass-modal {
+    width: 85%;
+    padding: 25px 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* ضمان التوسيط التام في الموبايل */
+  }
+  .athkar-box {
+    width: 90%;
+    padding: 20px;
   }
 }
 
@@ -368,8 +464,9 @@ body {
   top: 0; left: 0;
   width: 100%; height: 100%;
   background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
-  z-index: 1000;
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: none; /* يتم تفعيله عبر الكلاس active */
   align-items: center;
   justify-content: center;
   padding: 20px;
@@ -384,12 +481,12 @@ body {
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 30px;
-  padding: 40px 30px;
+  padding: 30px;
   width: 100%;
-  max-width: 400px;
+  max-width: 400px; /* ضمان العرض في الموبايل */
   text-align: center;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-  animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  margin: auto; /* التوسيط التام */
 }
 
 @keyframes modalPop {
@@ -449,10 +546,13 @@ body {
 
 /* شاشة الانتهاء */
 .finish-container {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
+  width: 100%;
   max-width: 600px;
-  width: 90%;
 }
 
 .finish-header i {
@@ -473,6 +573,10 @@ body {
   background: rgba(255, 255, 255, 0.05);
   padding: 30px;
   border-radius: 30px;
+  width: 90%;
+  max-width: 500px; /* تحديد عرض أقصى للأذكار */
+  margin: 0 auto;
+  text-align: center; /* توسيط نصوص الأذكار */
 }
 
 .athkar-box h3 {
@@ -485,6 +589,7 @@ body {
   font-size: 1.3rem;
   line-height: 2;
   color: #eee;
+  text-align: center; /* ضمان توسيط النص */
 }
 
 /* --- الأنيميشن --- */

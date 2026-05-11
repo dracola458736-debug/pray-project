@@ -4,6 +4,14 @@ const screenSelect = document.getElementById('screen-select');
 const screenTracker = document.getElementById('screen-tracker');
 const screenFinish = document.getElementById('screen-finish');
 const btnHome = document.getElementById('btn-home');
+const btnFinishPrayer = document.getElementById('btn-finish-prayer');
+const btnCloseTracker = document.getElementById('btn-close-tracker');
+const cameraModal = document.getElementById('camera-modal');
+const btnModalAllow = document.getElementById('btn-modal-allow');
+const btnModalClose = document.getElementById('btn-modal-close');
+const modalMessage = document.getElementById('modal-message');
+const modalTitle = document.getElementById('modal-title');
+const modalIconBox = document.getElementById('modal-icon-box');
 
 let selectedPrayerName = "";
 let targetRakat = 0;
@@ -22,6 +30,7 @@ let rakatCount = 0;
 let sajdaInCurrentRaka = 0;
 let isSajdaActive = false;
 let wakeLock = null;
+let stream = null; // تخزين الـ stream لإغلاقه
 
 const videoElement = document.getElementById('cam-video');
 const canvasElement = document.getElementById('cam-canvas');
@@ -35,21 +44,33 @@ async function requestWakeLock() {
     try {
         if ('wakeLock' in navigator) {
             wakeLock = await navigator.wakeLock.request('screen');
-            console.log('Screen Wake Lock is active');
         }
     } catch (err) {
         console.error(`${err.name}, ${err.message}`);
     }
 }
 
-// 4. وظيفة النطق الصوتي
+// 4. وظيفة النطق الصوتي (نطق الأرقام فقط)
 function speak(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
+    const arabicNumbers = {
+        "1": "واحد",
+        "2": "اثنان",
+        "3": "ثلاثة",
+        "4": "أربعة"
+    };
+    
+    const msg = arabicNumbers[text] || text;
+    const utterance = new SpeechSynthesisUtterance(msg);
     utterance.lang = 'ar-SA';
+    utterance.rate = 1.0;
+    utterance.pitch = 1;
+    
+    // إلغاء أي نطق جاري والبدء فوراً
+    window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
 }
 
-// 5. منطق "المستشعر" باستخدام الكاميرا (رصد الإعتام عند السجود)
+// 5. منطق "المستشعر" باستخدام الكاميرا
 function processFrame() {
     if (!screenTracker.classList.contains('active')) return;
 
@@ -59,47 +80,43 @@ function processFrame() {
     
     let totalBrightness = 0;
     for (let i = 0; i < data.length; i += 4) {
-        // حساب السطوع لكل بكسل (متوسط RGB)
         totalBrightness += (data[i] + data[i + 1] + data[i + 2]) / 3;
     }
-    
     const avgBrightness = totalBrightness / (data.length / 4);
-    
-    // إذا كان السطوع منخفضاً جداً (الجسم غطى الكاميرا)
-    const threshold = 40; // عتبة الظلام (يمكن تعديلها حسب الإضاءة)
+    const threshold = 40; 
     
     if (avgBrightness < threshold && !isSajdaActive) {
         isSajdaActive = true;
-        handleSajdaDetection();
-    } else if (avgBrightness > threshold + 20) {
+        playNotificationSound(); 
+    } 
+    else if (avgBrightness > threshold + 20 && isSajdaActive) {
         isSajdaActive = false;
+        handleRiseDetection();
     }
 
     requestAnimationFrame(processFrame);
 }
 
-function handleSajdaDetection() {
+function handleRiseDetection() {
     sajdaInCurrentRaka++;
-    playNotificationSound(); // صوت تنبيه خفيف عند كل سجدة
     
     if (sajdaInCurrentRaka === 2) {
         rakatCount++;
         sajdaInCurrentRaka = 0;
         rakatDisplay.innerText = rakatCount;
         
-        // نطق رقم الركعة
+        // نطق رقم الركعة المكتملة
         speak(rakatCount.toString());
         
         if (rakatCount >= targetRakat) {
-            // انتظار التسليم يدوياً أو تلقائياً
-            setTimeout(() => {
-                finishPrayer();
-            }, 2000);
+            btnFinishPrayer.style.display = 'block';
+            // تم إزالة رسالة النطق في النهاية بناء على الطلب
         }
     }
 }
 
 function finishPrayer() {
+    stopCamera();
     screenTracker.classList.remove('active');
     screenFinish.classList.add('active');
     document.getElementById('prayer-athkar').innerText = athkarText;
@@ -109,8 +126,56 @@ function finishPrayer() {
     }
 }
 
+function stopCamera() {
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+    }
+}
+
+// دالة لإظهار المودال (للرسائل والتأكيدات)
+function showModal(title, message, iconClass, onConfirm = null) {
+    modalTitle.innerText = title;
+    modalMessage.innerText = message;
+    modalIconBox.innerHTML = `<i class="fas ${iconClass}"></i>`;
+    cameraModal.classList.add('active');
+    
+    if (onConfirm) {
+        btnModalAllow.style.display = 'block';
+        btnModalAllow.innerText = 'نعم';
+        btnModalClose.innerText = 'إلغاء';
+        btnModalAllow.onclick = () => {
+            onConfirm();
+            hideModal();
+        };
+    } else {
+        btnModalAllow.style.display = 'none';
+        btnModalClose.innerText = 'فهمت';
+    }
+}
+
+function hideModal() {
+    cameraModal.classList.remove('active');
+}
+
+// زر الخروج X في صفحة العداد
+btnCloseTracker.onclick = () => {
+    showModal('إنهاء الصلاة', 'هل ترغب في إنهاء الصلاة والعودة للقائمة؟', 'fa-question-circle', () => {
+        stopCamera();
+        screenTracker.classList.remove('active');
+        screenSelect.classList.add('active');
+    });
+};
+
+btnModalClose.onclick = hideModal;
+
+btnFinishPrayer.onclick = finishPrayer;
+
 if (btnHome) {
-    btnHome.onclick = () => window.location.href = 'index.html';
+    btnHome.onclick = () => {
+        screenFinish.classList.remove('active');
+        screenSelect.classList.add('active');
+    };
 }
 
 // اختيار الصلاة وبدء العمل
@@ -120,7 +185,7 @@ document.querySelectorAll('.prayer-btn').forEach(btn => {
         targetRakat = prayerData[selectedPrayerName] || 4;
         
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ 
+            stream = await navigator.mediaDevices.getUserMedia({ 
                 video: { facingMode: "user" } 
             });
             videoElement.srcObject = stream;
@@ -128,15 +193,16 @@ document.querySelectorAll('.prayer-btn').forEach(btn => {
             
             currentPrayerNameDisplay.innerText = `صلاة ${selectedPrayerName}`;
             totalRakatTargetDisplay.innerText = targetRakat;
-            rakatCount = 0;
+            rakatCount = 0; // البدء من 0 ركعات مكتملة
             sajdaInCurrentRaka = 0;
             rakatDisplay.innerText = "0";
+            btnFinishPrayer.style.display = 'none';
 
             screenSelect.classList.remove('active');
             screenTracker.classList.add('active');
             
-            requestWakeLock(); // منع إغلاق الشاشة
-            requestAnimationFrame(processFrame); // بدء رصد "المستشعر"
+            requestWakeLock();
+            requestAnimationFrame(processFrame);
             
         } catch (err) {
             alert('يجب السماح بالكاميرا ليعمل المستشعر.');
@@ -150,8 +216,8 @@ function playNotificationSound() {
     const gainNode = audioCtx.createGain();
     oscillator.connect(gainNode);
     gainNode.connect(audioCtx.destination);
-    oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
-    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    oscillator.frequency.setValueAtTime(330, audioCtx.currentTime);
+    gainNode.gain.setValueAtTime(0.03, audioCtx.currentTime);
     oscillator.start();
     oscillator.stop(audioCtx.currentTime + 0.1);
 }

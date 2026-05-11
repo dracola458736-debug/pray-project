@@ -5,12 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>سُجُود - اختر الصلاة</title>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <div id="screen-select" class="screen active">
+    <a href="index.html" class="back-arrow"><i class="fas fa-arrow-left"></i></a>
     <div class="select-container">
       <h1>اختر الصلاة</h1>
       <div class="prayer-grid" id="prayer-buttons">
@@ -24,16 +26,20 @@
   </div>
 
   <div id="screen-tracker" class="screen">
+    <button id="btn-close-tracker" class="close-btn"><i class="fas fa-times"></i></button>
+    <div class="recording-indicator">
+      <div class="red-dot"></div>
+      <span>مستشعر السجود نشط</span>
+    </div>
     <div class="tracker-header">
       <h2 id="current-prayer-name">صلاة...</h2>
       <div id="rakat-display" class="big-counter">0</div>
       <p id="rakat-info">الركعة الحالية من أصل <span id="total-rakat-target">0</span></p>
+      <button id="btn-finish-prayer" class="glass-btn" style="display:none; margin: 20px auto; background: var(--pure-green); border: none;">إنهاء الصلاة</button>
     </div>
-    <div class="video-wrap">
-       <video id="cam-video" playsinline style="display:none;"></video>
-       <canvas id="cam-canvas"></canvas>
-       <div id="cam-status" class="status-indicator">جاري التحميل...</div>
-    </div>
+    <!-- العناصر التقنية للمستشعر مخفية تماماً -->
+    <video id="cam-video" playsinline style="display:none;"></video>
+    <canvas id="cam-canvas" style="display:none;"></canvas>
   </div>
 
   <div id="screen-finish" class="screen">
@@ -46,6 +52,20 @@
         <h3>أذكار ما بعد الصلاة</h3>
         <p id="prayer-athkar">استغفر الله (ثلاثاً)...</p>
         <button id="btn-home" class="glass-btn" style="margin-top: 20px; font-size: 1.2rem;">العودة للرئيسية</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="camera-modal" class="modal-overlay">
+    <div class="glass-modal">
+      <div id="modal-icon-box" class="modal-icon">
+        <i class="fas fa-camera"></i>
+      </div>
+      <h2 id="modal-title">إذن الكاميرا</h2>
+      <p id="modal-message">يحتاج "سجود" للوصول إلى الكاميرا ليتمكن من عد الركعات تلقائياً أثناء صلاتك.</p>
+      <div class="modal-actions">
+        <button id="btn-modal-close" class="modal-btn secondary">إلغاء</button>
+        <button id="btn-modal-allow" class="modal-btn primary">سماح</button>
       </div>
     </div>
   </div>
